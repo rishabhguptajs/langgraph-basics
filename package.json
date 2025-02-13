@@ -1,0 +1,21 @@
+{
+  "name": "langgraph-basics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/community": "^0.3.30",
+    "@langchain/core": "^0.3.40",
+    "@langchain/google-genai": "^0.1.8",
+    "@langchain/langgraph": "^0.2.46",
+    "dotenv": "^16.4.7",
+    "readline-sync": "^1.4.10"
+  }
+}
