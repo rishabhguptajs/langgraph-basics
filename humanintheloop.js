@@ -1,23 +1,37 @@
-import { StateGraph, Annotation, START, END, interrupt, MemorySaver } from "@langchain/langgraph";
+import {
+    StateGraph,
+    Annotation,
+    START,
+    END,
+    interrupt,
+    MemorySaver,
+} from "@langchain/langgraph"
+import fs from 'fs';
+import * as tslab from "tslab"
+
 const StateAnnotation = Annotation.Root({
-    input: (Annotation),
-    userFeedback: (Annotation)
-});
+    input: Annotation,
+    userFeedback: Annotation,
+})
+
 const step1 = (_state) => {
-    console.log('--- Step 1 ---');
-    return {};
-};
+    console.log("--- Step 1 ---")
+    return {}
+}
+
 const humanFeedback = (_state) => {
-    console.log('--- Human Feedback ---');
-    const feedback = interrupt("Please provide feedback");
+    console.log("--- Human Feedback ---")
+    const feedback = interrupt("Please provide feedback")
     return {
-        userFeedback: feedback
-    };
-};
+        userFeedback: feedback,
+    }
+}
+
 const step3 = (_state) => {
-    console.log('--- Step 3 ---');
-    return {};
-};
+    console.log("--- Step 3 ---")
+    return {}
+}
+
 const builder = new StateGraph(StateAnnotation)
     .addNode("step1", step1)
     .addNode("humanFeedback", humanFeedback)
@@ -25,13 +39,19 @@ const builder = new StateGraph(StateAnnotation)
     .addEdge(START, "step1")
     .addEdge("step1", "humanFeedback")
     .addEdge("humanFeedback", "step3")
-    .addEdge("step3", END);
-const memory = new MemorySaver();
+    .addEdge("step3", END)
+
+const memory = new MemorySaver()
+
 const graph = builder.compile({
-    checkpointer: memory
-});
-// Remove tslab visualization and replace with console output
-console.log("Graph compiled successfully");
-// Optionally, if you want to see the Mermaid diagram definition:
-const drawableGraph = await graph.getGraphAsync();
-console.log(await drawableGraph.drawMermaid());
+    checkpointer: memory,
+})
+
+console.log("Graph compiled successfully")
+
+const drawableGraph = await graph.getGraphAsync()
+
+const image = await drawableGraph.drawMermaidPng().then((image) => image.arrayBuffer())
+
+// Ensure the image is saved correctly
+fs.writeFileSync("graph.png", Buffer.from(image))
