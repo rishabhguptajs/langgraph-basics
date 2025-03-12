@@ -10,7 +10,7 @@ import { z } from "zod";
 dotenv.config();
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const model = new ChatGoogleGenerativeAI({ apiKey: GEMINI_API_KEY, temperature: 0 });
+const model = new ChatGoogleGenerativeAI({ apiKey: GEMINI_API_KEY, temperature: 0, model: "gemini-1.5-flash", });
 
 const AgentState = Annotation.Root({
     messages: Annotation({
